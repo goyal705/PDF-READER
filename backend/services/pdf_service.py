@@ -1,9 +1,9 @@
 import fitz
-from langchain.schema import Document
+from langchain_core.documents import Document
 from utils.config import render_page_to_jpeg_bytes, ocr_with_ocrspace
 
 MAX_PAGES = 50
-MIN_TEXT_LEN = 20
+MIN_TEXT_LEN = 1
 
 def load_and_validate_pdf(file_path):
     pdf = fitz.open(file_path)

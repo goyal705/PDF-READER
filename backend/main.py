@@ -12,24 +12,35 @@ SESSIONS = {}  # simple in-memory store
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
-    file_id = str(uuid.uuid4())
-    file_path = f"temp_{file_id}.pdf"
+    try:
+        file_id = str(uuid.uuid4())
+        file_path = f"temp_{file_id}.pdf"
 
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
+        with open(file_path, "wb") as f:
+            f.write(await file.read())
 
-    # Validate + process
-    docs = load_and_validate_pdf(file_path)
-    db, chunks = build_vector_db(docs, file_id)
+        # Validate + process
+        docs = load_and_validate_pdf(file_path)
+        db, chunks = build_vector_db(docs, file_id)
 
-    summary = generate_summary(chunks)
+        summary = generate_summary(chunks)
 
-    SESSIONS[file_id] = db
+        SESSIONS[file_id] = db
+        
+        response = {
+            "file_id": file_id,
+            "summary": summary
+        }
+        print(response)
+        os.remove(file_path)
 
-    return {
-        "file_id": file_id,
-        "summary": summary
-    }
+        return response
+    except Exception as e:
+        print(e)
+        return {
+            "file_id": file_id,
+            "summary": e
+        }
 
 
 @app.post("/ask")

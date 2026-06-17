@@ -10,6 +10,7 @@ def generate_summary(chunks):
     text = "\n".join([c.page_content for c in chunks[:20]])
 
     prompt = f"""
+    Detect the primary language of the following text and answer in that language.
     Summarize this document:
 
     {text}
