@@ -18,6 +18,7 @@ def load_and_validate_pdf(file_path):
         text = page.get_text().strip()
 
         if len(text) < MIN_TEXT_LEN:
+            print(f"Page {i} has insufficient text, performing OCR...")
             img_bytes = render_page_to_jpeg_bytes(page)
             text = ocr_with_ocrspace(img_bytes, language="auto").strip()
 

@@ -31,7 +31,6 @@ async def upload_pdf(file: UploadFile = File(...)):
             "file_id": file_id,
             "summary": summary
         }
-        print(response)
         os.remove(file_path)
 
         return response
